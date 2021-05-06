@@ -9,7 +9,7 @@ terraform {
 
 provider "kops" {
   # Configuration options
-  state_store = "kevin-test-k8s-cluster"
+  state_store = "s3://kevin-test-k8s-cluster"
 }
 
 provider "aws" {
