@@ -64,7 +64,7 @@ resource "kops_cluster" "cluster" {
   name               = "cluster.example.com"
   admin_ssh_key      = file("/home/kevin/.ssh/id_rsa.pub")
   cloud_provider     = "aws"
-  kubernetes_version = "1.19"
+  kubernetes_version = "1.19.10"
   dns_zone           = aws_route53_zone.private.id
   network_id         = aws_vpc.test-k8s.id
 
@@ -166,7 +166,7 @@ resource "kops_instance_group" "master-0" {
   min_size     = 1
   max_size     = 1
   machine_type = "t3.medium"
-  subnets      = [aws_subnet.k8s-0.id]
+  subnets      = [aws_subnet.k8s-0.tags.Name]
   depends_on   = [kops_cluster.cluster]
 }
 
@@ -177,7 +177,7 @@ resource "kops_instance_group" "master-1" {
   min_size     = 1
   max_size     = 1
   machine_type = "t3.medium"
-  subnets      = [aws_subnet.k8s-1.id]
+  subnets      = [aws_subnet.k8s-1.tags.Name]
   depends_on   = [kops_cluster.cluster]
 }
 
@@ -188,7 +188,7 @@ resource "kops_instance_group" "master-2" {
   min_size     = 1
   max_size     = 1
   machine_type = "t3.medium"
-  subnets      = [aws_subnet.k8s-2.id]
+  subnets      = [aws_subnet.k8s-2.tags.Name]
   depends_on   = [kops_cluster.cluster]
 }
 
@@ -200,9 +200,9 @@ resource "kops_instance_group" "nodes" {
   max_size     = 1
   machine_type = "t3.medium"
   subnets = [
-    aws_subnet.k8s-0.id,
-    aws_subnet.k8s-1.id,
-    aws_subnet.k8s-2.id
+    aws_subnet.k8s-0.tags.Name,
+    aws_subnet.k8s-1.tags.Name,
+    aws_subnet.k8s-2.tags.Name
   ]
   depends_on = [kops_cluster.cluster]
 }
